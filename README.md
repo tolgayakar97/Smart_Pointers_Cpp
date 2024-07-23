@@ -25,3 +25,11 @@ Burada, Example nesnesine işaret eden bir ptr1 ve ptr2 “unique_ptr”ları ta
 ![Weak Pointer Output](Images/weak_ptr_output.png)
 
 Örnekte, Example nesnesini işaret eden, sharedPtr1 adında bir “shared_ptr” işaretçisi ve weakPtr1 adında bir “weak_ptr” işaretçisi oluşturulmuştur. sharedPtr1 işaretçisi, weakPtr1 işaretçisine (weakPtr1 tıpkı bir “shared_ptr”mış gibi) atanmıştır. Ancak dikkat edilirse, Example nesnesi için referans değeri 1 olarak kalmıştır. Bunun nedeni, “weak_ptr”ların işaret ettiği nesneye zayıf bir referans sağlaması ve işaret ettiği nesnelerin yaşam döngüsünde bir etkisi olmamasıdır. Örneğin devamında ise, yeni bir scope açılıp, açılan scope içinde yine Example nesnesine işaret eden sharedPtr2 adında başka bir işaretçi oluşturulmuştur. Ancak bu sefer, sharedPtr2 işaretçisine, weakPtr1 işaretçisi, lock() metodu ile atanmıştır. lock() metodu ile, weakPtr1 işaretçisinden bir “shared_ptr” oluşturulur. Bu da, Example nesnesi için referans sayısının artması, yani örneğe göre 2 olması anlamına gelmektedir. Scope bittiğinde ise referans sayısı tekrar 1'e düşer. reset() metodu ile, sharedPtr1 işaretçisinin işaret ettiği nesne serbest bırakılır ve eğer başka bir “shared_ptr” bu nesneye sahiplik etmiyorsa, nesnenin ömrü sona erer. Bu da Example destructor’unun çağırılmasına ve weakPtr1'in “shared_ptr”nesnesine olan referansın geçersiz hale gelmesine neden olacaktır. reset() işleminden sonra, Example için tekrar referans değerine bakıldığında, sayının 0 olduğu gözlemlenmektedir. Örneğin devamında, sharedPtr3 işaretçisi oluşturulmuştur ve tıpkı scope içindeki gibi weakPtr1 işaretçisi weakPtr1.lock() ile atanmıştır. Ancak sharedPtr1.reset() işleminden sonra sharedPtr1 işaretçisinin işaret ettiği nesne serbest bırakıldığından ve weakPtr1 işaretçisinin “shared_ptr”a olan referansının geçersiz olmasından dolayı, weakPtr1.lock(), nullptr değeri dönecektir. Bu yüzden program, örnekteki if bloğuna değil, else bloğuna girecektir.
+
+### Faydalı linkler:
+
+https://learn.microsoft.com/en-us/cpp/cpp/smart-pointers-modern-cpp?view=msvc-170  
+https://www.geeksforgeeks.org/unique_ptr-in-cpp/  
+https://learn.microsoft.com/en-us/cpp/cpp/how-to-create-and-use-shared-ptr-instances?view=msvc-170  
+https://www.geeksforgeeks.org/shared_ptr-in-cpp/  
+https://www.geeksforgeeks.org/weak_ptr-in-cpp/  
